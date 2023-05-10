@@ -1,0 +1,4 @@
+Hora horaAtual = new Hora();
+System.out.println(horaAtual.getHora1());
+System.out.println(horaAtual.getHora2());
+System.out.println(horaAtual.getSegundos());
