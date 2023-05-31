@@ -1,247 +1,185 @@
 import java.util.Scanner;
+import java.util.Date;
+import java.text.DateFormat;
+
+// JOÃO ANTONIO DIAS CB3020479
 
 public class Data {
-    Scanner ler = new Scanner(System.in);
-    private int dia;
-    private int mes;
-    private int ano;
-
-
-    // CONSTRUTORES
-    public Data() {
-
+    
+    Scanner scan = new Scanner(System.in);
+    Date date = new Date();
+    DateFormat formaData = DateFormat.getDateInstance(DateFormat.FULL);
+    
+    private int dia, mes, ano;
+    
+    public Data()
+    {
+        entraAno();
+        entraMes();
+        entraDia();
     }
-
-    public Data(int d, int m, int a) {
-        setDia(d);
-        setMes(m);
-        setAno(a);
+    
+    public Data(int d, int m, int a) 
+    {
+        entraDia(d);
+        entraMes(m);
+        entraAno(a);
     }
-
-
-    // METÓDOS SETTER COM VALIDAÇÃO
-    public void setDia(int d) {
-        while (d < 1 || d > 31) {
-            System.out.println("Valor inválido, por favor digite um valor entre 1 e 31");
-            System.out.print("Insira um valor válido para o dia: ");
-            d = ler.nextInt();
-        }
-
+    
+    public void entraDia(int d)
+    {
         dia = d;
     }
-
-    public void setMes(int m) {
-        while (m < 1 || m > 12) {
-            System.out.println("Valor inválido, por favor digite um valor entre 1 e 12");
-            System.out.print("Insira um valor válido para o mês: ");
-            m = ler.nextInt();
-        }
+    
+    public void entraMes(int m)
+    {
         mes = m;
     }
-
-    public void setAno(int a) {
-        while (a < 1) {
-            System.out.println("Valor inválido, por favor digite um valor maior que 0");
-            System.out.print("Insira um valor válido para o ano: ");
-            a = ler.nextInt();
-        }
-
+    
+    public void entraAno(int a)
+    {
         ano = a;
     }
-
-
-    // METÓDOS SETTER VAZIOS
-    public void setDia() {
-        int d;
-        System.out.print("Insira um valor para o dia: ");
-        d = ler.nextInt();
-        setDia(d);
+    
+    public void entraDia()
+    {
+        int limite_mes = limiteMes();
+        do
+        {
+            System.out.println("Digite o dia: ");
+            dia = scan.nextInt();
+        }
+        while(dia > limite_mes || dia < 1);
+        
     }
-
-    public void setMes() {
-        int m;
-        System.out.print("Insira um valor para o mês: ");
-        m = ler.nextInt();
-        setMes(m);
+    
+    public void entraMes()
+    {
+        do
+        {
+            System.out.println("Digite o mes: ");
+            mes = scan.nextInt();
+        }
+        while(mes >12 || mes <1);
     }
-
-    public void setAno() {
-        int a;
-        System.out.print("Insira um valor para o ano: ");
-        a = ler.nextInt();
-
-        setAno(a);
+    
+    public void entraAno()
+    {
+        do
+        {
+            System.out.println("Digite o ano: ");
+            ano = scan.nextInt();
+        }
+        while(ano < 1);
     }
-
-
-    // MÉTODOS GETTER
-    public int getDia() {
+    
+    public int retDia()
+    {
         return dia;
     }
-
-    public int getMes() {
+    
+    public int retMes()
+    {
         return mes;
     }
-
-    public int getAno() {
+    
+    public int retAno()
+    {
         return ano;
     }
-
-    public String getData1() {
-        String d;
-
-        d = dia + "/" + mes + "/" + ano;
-        return d;
+    
+    public String mostra1() 
+    {
+        String string_dia = "";
+        String string_mes = "";
+        String string_ano = "";
+        
+        string_dia = String.format("%02d", dia);
+        string_mes = String.format("%02d", mes);
+        string_ano = String.format("%02d", ano);
+        
+        System.out.print(date);
+        return string_dia + "/" + string_mes + "/" + string_ano;
     }
-
-    public String getData2() {
-        String d;
-
-        d = dia + "/" + mesPorExtenso(mes) + "/" + ano;
-        return d;
+    
+    public String mostra2()
+    {
+        String string_dia = "";
+        String string_mes = "";
+        String string_ano = "";
+        
+        string_dia = String.format("%02d", dia);
+        string_mes = mesPorExtenso(mes);
+        string_ano = String.format("%04d", ano);
+        
+        return string_dia + "/" + string_mes + "/" + string_ano;
     }
-
-    public boolean bissexto() {
-        return (ano % 4 == 0 && ano % 100 != 0) || (ano % 400 == 0);
-    }
-
-    public int diasTranscorridos() {
-        int[] diasPorMes = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-        int diasTranscorridos = dia;
-
-        for (int i = 1; i < mes; i++) {
-            diasTranscorridos += diasPorMes[i];
+    
+    public boolean bissexto()
+    {
+        boolean valor = false;
+        if(ano%4 != 0)
+        {
+            valor = true;
         }
-
-        if (mes > 2 && bissexto()) {
-            diasTranscorridos++;
+        
+        return valor;
+    }
+    
+    public int limiteMes()
+    {
+        boolean valor = bissexto();
+        int[] meses = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+        if(valor == true)
+        {
+            meses[1] = 28;
         }
-
-        return diasTranscorridos;
+        
+        return meses[mes-1];
     }
-
-    public static String mesPorExtenso(int mes) {
-        String[] meses = {"", "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto",
-                "Setembro", "Outubro", "Novembro", "Dezembro"};
-        return meses[mes];
+    
+    public String mesPorExtenso(int m)
+    {
+        String[] meses = {"Janeiro", "Fevereiro", "Marco", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"};
+        
+        return meses[m-1];
     }
-
-    public void apresentaDataAtual() {
-        java.util.Date dataAtual = new java.util.Date();
-        java.text.DateFormat formatoData = java.text.DateFormat.getDateInstance(java.text.DateFormat.FULL);
-        System.out.println("Data atual: " + formatoData.format(dataAtual));
+    
+    public int diasTranscorridos()
+    {
+        boolean valor = bissexto();
+        int data = 0;
+        int[] meses = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+        
+        if (valor == true)
+        {
+            meses[1] = 28;
+        }
+        for(int i = 0; i <mes-1 ; i++)
+        {
+            data = data+meses[i];
+        }
+        
+        return dia + data;
     }
-
+    
+    public void apresentaDataAtual(){
+        System.out.println("Data atual formatada: " + formaData.format(date));
+    }
+    
     public static void main(String[] args) {
-        System.out.println("Olá, vamos testar essa classe!");
-        Scanner ler = new Scanner(System.in);
-        boolean quebra = false;
+        Data data1 = new Data();
+        System.out.println("Data 1: " + data1.mostra1());
+        System.out.println("Data 1 por extenso: " + data1.mostra2());
+        System.out.println("Dias transcorridos desde o início do ano: " + data1.diasTranscorridos());
 
-        Data data = new Data();
+        System.out.println();
 
-        do {
-            int seletor;
-            System.out.println("Olá, seja bem-vindo ao menu inicial");
-            System.out.println("------ SELECIONE UMA OPÇÃO ------");
-
-            System.out.println("1. Testar o método Data(d, m, a)");
-            System.out.println("2. Testar método setDia(d)");
-            System.out.println("3. Testar método setMes(m)");
-            System.out.println("4. Testar método setAno(a)");
-            System.out.println("5. Testar método setDia()");
-            System.out.println("6. Testar método setMes()");
-            System.out.println("7. Testar método setAno()");
-            System.out.println("8. Testar método getDia()");
-            System.out.println("9. Testar método getMes()");
-            System.out.println("10. Testar método getAno()");
-            System.out.println("11. Testar método getData1()");
-            System.out.println("12. Testar método getData2()");
-            System.out.println("13. Testar método bissexto()");
-            System.out.println("14. Testar método diasTranscorridos()");
-            System.out.println("15. Sair do sistema de testes");
-
-            System.out.println("");
-            System.out.println("");
-            System.out.print("Insira um valor entre 1 e 15 para selecionar uma opção: ");
-            seletor = ler.nextInt();
-
-            switch (seletor) {
-                case 1:
-                    int d, m, a;
-                    System.out.print("Insira o dia da nova data: ");
-                    d = ler.nextInt();
-
-                    System.out.print("Insira o mês da nova data: ");
-                    m = ler.nextInt();
-
-                    System.out.print("Insira o ano da nova data: ");
-                    a = ler.nextInt();
-
-                    Data data2 = new Data(d, m, a);
-                    System.out.println(data2.getData2());
-                    break;
-
-                case 2:
-                    System.out.print("Insira o novo dia: ");
-                    d = ler.nextInt();
-                    data.setDia(d);
-
-                    break;
-                case 3:
-                    System.out.print("Insira o novo mês: ");
-                    m = ler.nextInt();
-                    data.setMes(m);
-
-                    break;
-                case 4:
-                    System.out.print("Insira o novo ano: ");
-                    a = ler.nextInt();
-                    data.setAno(a);
-
-                    break;
-                case 5:
-                    data.setDia();
-                    break;
-                case 6:
-                    data.setMes();
-                    break;
-                case 7:
-                    data.setAno();
-                    break;
-                case 8:
-                    System.out.println(data.getDia());
-                    break;
-                case 9:
-                    System.out.println(data.getMes());
-                    break;
-                case 10:
-                    System.out.println(data.getAno());
-                    break;
-                case 11:
-                    System.out.println("Data na classe: " + data.getData1());
-                    break;
-                case 12:
-                    System.out.println("Data na classe: " + data.getData2());
-                    break;
-                case 13:
-                    System.out.println("É bissexto? " + data.bissexto());
-                    break;
-                case 14:
-                    System.out.println("Dias transcorridos: " + data.diasTranscorridos());
-                    break;
-                case 15:
-                    quebra = true;
-                    break;
-                default:
-                    System.out.println("O valor selecionado é inválido. Retornando ao menu inicial...");
-                    break;
-
-            }
-
-            System.out.println("");
-
-        } while (!quebra);
-
-        System.out.println("Obrigado por testar a nossa classe!");
+        Data data2 = new Data(15, 6, 2023);
+        System.out.println("Data 2: " + data2.mostra1());
+        System.out.println("Data 2 por extenso: " + data2.mostra2());
+        System.out.println("Dias transcorridos desde o início do ano: " + data2.diasTranscorridos());
+        
+        data2.apresentaDataAtual();
     }
 }
