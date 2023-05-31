@@ -1,6 +1,6 @@
 // João Antonio Dias CB3020479
 
-public class DataTeste extends Data {
+public class ProgramaTeste extends Data {
     
     public static void main(String[] args)
     {
